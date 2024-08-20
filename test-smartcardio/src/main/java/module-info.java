@@ -1,3 +1,3 @@
-module name {
+module test {
     requires java.smartcardio;
 }
