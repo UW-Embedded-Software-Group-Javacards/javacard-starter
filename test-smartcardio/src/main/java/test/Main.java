@@ -1,6 +1,6 @@
 package test;
 
-//import java.smartcardio;
+import javax.smartcardio.*;
 import java.util.List;
 
 public class Main {
