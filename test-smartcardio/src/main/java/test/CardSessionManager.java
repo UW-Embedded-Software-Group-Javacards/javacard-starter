@@ -2,7 +2,6 @@ package test;
 
 import javax.smartcardio.*;
 import java.util.List;
-import java.lang.Exception;
 import java.lang.UnsupportedOperationException;
 
 public class CardSessionManager {
@@ -24,7 +23,6 @@ public class CardSessionManager {
     // gets the first terminal
     private CardTerminal getFirstTerminal() throws CardException {
         List<CardTerminal> terminals = this.getLocalTerminals();
-        // get the first terminal
         if (terminals.isEmpty()) {
             System.err.println("No card terminals found.");
             return null;
@@ -56,7 +54,7 @@ public class CardSessionManager {
 
     }
 
-    public void connect() throws Exception {
+    public void connect() throws CardException {
         CardTerminal terminal = null;
         try {
             terminal = this.getFirstTerminal();
@@ -64,7 +62,7 @@ public class CardSessionManager {
             System.err.println("CardException: " + e.getMessage());
         } finally {
             if (terminal == null) {
-                throw new Exception("No card terminals found.");
+                throw new CardException("No card terminals found.");
             }
         }
     
@@ -75,7 +73,7 @@ public class CardSessionManager {
             System.err.println("CardException: " + e.getMessage());
         } finally {
             if (channel == null) {
-                throw new Exception("No card found in terminal.");
+                throw new CardException("No card found in terminal.");
             }
         }
 
