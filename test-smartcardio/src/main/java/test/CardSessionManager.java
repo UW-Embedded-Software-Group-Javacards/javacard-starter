@@ -74,21 +74,24 @@ public class CardSessionManager {
         // send apdus
         System.out.println("Sending APDUs...");
 
-        // hardcoded select master file command (testing)
-        CommandAPDU selectAPDU = new CommandAPDU(
-                0x00, 0xA4, 0x00, 0x00,
-                new byte[] { (byte) 0xF3, (byte) 0x00 });
+        // Create a GET DATA APDU command
+        byte[] getData = new byte[] {
+                (byte) 0x00, // CLA (class byte)
+                (byte) 0xCA, // INS (instruction byte for GET DATA)
+                (byte) 0x00, // P1 (parameter 1)
+                (byte) 0x00, // P2 (parameter 2)
+                (byte) 0x00 // Lc (length of data)
+        };
 
-        // get the response after the select command
-        ResponseAPDU response = channel.transmit(selectAPDU);
-        System.out.println(response);
+        // Send the APDU command to the card
+        CommandAPDU command = new CommandAPDU(getData);
+        ResponseAPDU response = channel.transmit(command);
 
-        // Check the status word (SW)
-        if (response.getSW() == 0x9000) {
-            System.out.println("Master File selected successfully.");
-        } else {
-            System.out.println("Failed to select Master File: " + Integer.toHexString(response.getSW()));
-        }
+        // Display the response
+        byte[] responseBytes = response.getBytes();
+        System.out.println("Response: " + bytesToHex(responseBytes));
+        System.out.println("SW1 SW2: " + String.format("%02X %02X", response.getSW1(), response.getSW2()));
+
     }
 
 }
