@@ -8,7 +8,7 @@ public class CardApplication {
         CardSessionManager manager = new CardSessionManager();
 
         try {
-            manager.connect();
+            manager.communicate();
         } catch (Exception e) {
             e.printStackTrace();
         }
