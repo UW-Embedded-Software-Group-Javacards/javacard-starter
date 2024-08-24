@@ -12,7 +12,7 @@ public class CardSessionManager {
     private CardTerminal terminal;
     private CardChannel channel;
 
-    public CardSessionManager() throws CardException { 
+    public CardSessionManager() throws CardException {
         terminal = this.getFirstTerminal();
         channel = this.identifyCard(terminal);
     }
@@ -60,6 +60,7 @@ public class CardSessionManager {
         Card localCard = terminal.connect("DIRECT");
 
         System.out.println("Local card protocol: " + localCard.getProtocol());
+        System.out.println("Card ATR: " + localCard.getATR());
 
         // card found: return channel to facilitate apdus
         return localCard.getBasicChannel();
@@ -69,10 +70,25 @@ public class CardSessionManager {
      * connects to a card terminal and sends apdus
      */
     // rename this to avoid name collision
-    public void connect() throws Exception {
+    public void communicate() throws Exception {
         // send apdus
         System.out.println("Sending APDUs...");
 
+        // hardcoded select master file command (testing)
+        CommandAPDU selectAPDU = new CommandAPDU(
+                0x00, 0xA4, 0x00, 0x00,
+                new byte[] { (byte) 0xF3, (byte) 0x00 });
+
+        // get the response after the select command
+        ResponseAPDU response = channel.transmit(selectAPDU);
+        System.out.println(response);
+
+        // Check the status word (SW)
+        if (response.getSW() == 0x9000) {
+            System.out.println("Master File selected successfully.");
+        } else {
+            System.out.println("Failed to select Master File: " + Integer.toHexString(response.getSW()));
+        }
     }
 
 }
