@@ -57,7 +57,8 @@ public class CardSessionManager {
         System.out.println("Card found in terminal: " + terminal.getName() + ".");
         // connecting using any available protocol
         // T=0 is character oriented protocol, allows for apdus
-        Card localCard = terminal.connect("*");
+        Card localCard = terminal.connect("DIRECT");
+
         System.out.println("Local card protocol: " + localCard.getProtocol());
 
         // card found: return channel to facilitate apdus
@@ -67,10 +68,11 @@ public class CardSessionManager {
     /**
      * connects to a card terminal and sends apdus
      */
+    // rename this to avoid name collision
     public void connect() throws Exception {
         // send apdus
         System.out.println("Sending APDUs...");
-        throw new UnsupportedOperationException("Card communication not implemented yet.");
+
     }
 
 }
